@@ -119,9 +119,13 @@ func ListenAndServeSpdyOnly(addr string, certFile string, keyFile string, handle
 	}
 
 	var err error
-	server.TLSConfig.Certificates[0], err = tls.LoadX509KeyPair(certFile, keyFile)
-	if err != nil {
-		return err
+
+	if certFile != "" || keyFile != "" {
+		var err error
+		server.TLSConfig.Certificates[0], err = tls.LoadX509KeyPair(certFile, keyFile)
+		if err != nil {
+			return err
+		}
 	}
 
 	conn, err := net.Listen("tcp", addr)
